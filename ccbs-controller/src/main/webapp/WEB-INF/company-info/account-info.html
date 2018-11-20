@@ -128,7 +128,7 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-user"
                         ng-click="saveU(u)">修改
                 </button>
-                <button type="button" class="btn btn-danger" ng-click="deleteUser()">删除</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteUser(u)">删除</button>
             </td>
         </tr>
         </tbody>
@@ -456,16 +456,16 @@
         };
 
         //删除体检人员信息
-        $scope.deleteUser = function () {
+        $scope.deleteUser = function (u) {
             if (confirm("是否删除？")) {
-                $http.post("/company-info/delete-user", $scope.user.userid
+                $http.post("/company-info/delete-user", u.userid
                 ).then(
                     function success(response) {
                         window.alert(response.data.message);
                     }
                 )
             }
-        }
+        };
 
         $scope.saveU = function (u) {
             $scope.user = u;

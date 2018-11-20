@@ -201,10 +201,10 @@ public class AccountAction {
      */
     @RequestMapping("/recharge")
     @ResponseBody
-    public ResultMessage recharge(HttpSession session, @RequestBody Long recharPrice) {
+    public ResultMessage recharge(HttpSession session, @RequestBody Long rechargePrice) {
         Long accountId=((Account)session.getAttribute(Constant.SESSION_LOGIN_ACCOUNT)).getAccountid();
         Long companyId=accountService.findCompanyId(accountId);
-        Integer result = companyService.recharge(companyId, recharPrice);
+        Integer result = companyService.recharge(companyId, rechargePrice);
         if (result>0){
             return ResultMessage.createSuccessMessage("success", null);
         }else {

@@ -9,6 +9,7 @@
   <resultMap id="doctorMap" type="team.yingyingmonster.ccbs.database.bean.Doctor" >
     <id column="DOCTORID" property="doctorid" jdbcType="DECIMAL" />
     <result column="ACCOUNTID" property="accountid" jdbcType="DECIMAL" />
+    <result property="deptid" column="DEPTID"/>
     <result column="DOCTORGENDER" property="doctorgender" jdbcType="DECIMAL" />
     <result column="DOCTORAGE" property="doctorage" jdbcType="DECIMAL" />
     <result column="DOCTORPHONE" property="doctorphone" jdbcType="VARCHAR" />
