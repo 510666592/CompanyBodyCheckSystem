@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface AccountListMapper {
    List<Account> selectAllAccount();
+   Long addAccount(Account account);
+   Integer deleteByPrimaryKey(Long accountId);
 }

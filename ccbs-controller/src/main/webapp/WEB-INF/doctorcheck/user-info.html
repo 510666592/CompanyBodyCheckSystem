@@ -44,7 +44,7 @@
                 <div class="dropdown">
                     <label for="users">可体检人员:</label>
                     <select class="form-control" id="users" ng-model="userid" ng-change="getuserinfo()">
-                        <option ng-repeat="x in users" value="{{x.userCheckByUsercheckid.userByUserid.userid}}">{{x.userCheckByUsercheckid.userByUserid.username}}</option>
+                        <option ng-repeat="x in users" value="{{x.userCheckByUsercheckid.user.userid}}">{{x.userCheckByUsercheckid.user.username}}</option>
                     </select>
                 </div>
             </div>

@@ -30,6 +30,10 @@ import team.yingyingmonster.ccbs.database.mapper.dingli.DingRoleMapper;
             PageHelper.orderBy("ROLEID");
             return ResultMessage.createSuccessMessage("success!",dingRoleMapper.selectAllRole());
         }
-
+        //权限设置模态框
+    @RequestMapping("/role-permission")
+    public String index2() {
+        return "background-management/role-management-permissions";
+    }
     }
 

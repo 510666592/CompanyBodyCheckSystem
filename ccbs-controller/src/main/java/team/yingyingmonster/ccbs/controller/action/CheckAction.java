@@ -25,6 +25,6 @@ public class CheckAction {
       @RequestMapping("/get-checkList")
       @ResponseBody
       public ResultMessage getCheck() {
-          return ResultMessage.createSuccessMessage("success!", dingCheckListMapper.selectAllCheck());
+            return ResultMessage.createSuccessMessage("success!", dingCheckListMapper.selectAllCheck());
       }
 }

@@ -7,10 +7,17 @@
     <result column="COMPANYPRICE" property="companyprice" jdbcType="DECIMAL" />
     <result column="COMPANYEMAIL" property="companyemail" jdbcType="VARCHAR" />
     <result column="COMPANYPHONE" property="companyphone" jdbcType="VARCHAR" />
+    <association property="accountByAccountid" resultMap="AccountIdResultMap"/>
+  </resultMap>
+  <resultMap id="AccountIdResultMap" type="team.yingyingmonster.ccbs.database.bean.Account">
+    <result column="ACCOUNTNAME" property="accountname" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     COMPANYID, ACCOUNTID, COMPANYPRICE, COMPANYEMAIL, COMPANYPHONE
   </sql>
+  <select id="selectAllCompany" resultMap="BaseResultMap">
+        select*from(select a.accountname,b.* from ACCOUNT_TABLE a,COMPANY_TABLE b where a.ACCOUNTID=b.ACCOUNTID)
+    </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />

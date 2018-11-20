@@ -20,7 +20,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="x in summarys">
-                            <td>{{x.billByBillid.userCheckByUsercheckid.userByUserid.username}}</td>
+                            <td>{{x.billByBillid.userCheckByUsercheckid.user.username}}</td>
                             <td>{{x.billByBillid.checkByCheckid.checkname}}</td>
                             <td><button class="btn btn-primary" data-toggle="modal" ng-click="summarydetail(x.reportid)" data-target="#summarywindow">查看</button>
                                 <button class="btn btn-primary" ng-click="summarycommit(x.reportid,pageinfo.pageNum)" id="submit">提交</button> </td>
@@ -52,7 +52,6 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" ng-click="summarysave()" data-dismiss="modal">保存</button>
                             </div>
-
                         </div>
                     </div>
                 </div>

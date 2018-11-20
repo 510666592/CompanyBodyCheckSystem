@@ -6,12 +6,16 @@
     <result column="DEPTID" property="deptid" jdbcType="DECIMAL" />
     <result column="CHECKNAME" property="checkname" jdbcType="VARCHAR" />
     <result column="CHECKPRICE" property="checkprice" jdbcType="DECIMAL" />
+    <association property="deptByDeptid" resultMap="DeptResultMap"/>
+  </resultMap>
+  <resultMap id="DeptResultMap" type="team.yingyingmonster.ccbs.database.bean.Dept">
+    <result column="DEPTNAME" property="deptname" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     CHECKID, DEPTID, CHECKNAME, CHECKPRICE
   </sql>
   <select id="selectAllCheck" resultMap="BaseResultMap">
-        select * from CHECK_TABLE
+        select*from (select a.*,b.DEPTNAME from CHECK_TABLE a,DEPT_TABLE b WHERE a.DEPTID = b.DEPTID)
     </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 

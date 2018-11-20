@@ -20,4 +20,7 @@
             <if test="menustate != null">and MENUSTATE=#{menustate}</if>
         </where>
     </select>
+    <select id="selectMenusByRoleid" parameterType="long" resultMap="BaseResultMap">
+        select * from MENU_TABLE where MENUSTATE=0 and MENUID in (select MENUID from ROLE_MENU_TABLE where ROLEID=#{roleid})
+    </select>
 </mapper>

@@ -1,10 +1,13 @@
 package team.yingyingmonster.ccbs.service.serviceimplement;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.yingyingmonster.ccbs.database.bean.Account;
 import team.yingyingmonster.ccbs.database.bean.Menu;
+import team.yingyingmonster.ccbs.database.mapper.dingli.DingMenuMapper;
 import team.yingyingmonster.ccbs.service.serviceinterface.MenuService;
 
+import javax.xml.ws.Action;
 import java.util.List;
 
 /**
@@ -15,6 +18,8 @@ import java.util.List;
  **/
 @Service
 public class MenuServiceImplement implements MenuService {
+    @Autowired
+    private DingMenuMapper dingMenuMapper;
     @Override
     public boolean hasPremission(Account accountBean, Menu menuBean)
     {
@@ -22,8 +27,14 @@ public class MenuServiceImplement implements MenuService {
     }
 
     @Override
-    public List<Menu> selectAccountMenuByRoleId(Long roleId)
-    {
+    public List<Menu> selectAccountMenuByRoleId(Long roleId) {
         return null;
+    }
+
+    @Override
+    public boolean updateMenu(Menu menu) {
+        Integer result=0;
+        result = dingMenuMapper.updateByPrimaryKeySelective(menu);
+        return result>0;
     }
 }

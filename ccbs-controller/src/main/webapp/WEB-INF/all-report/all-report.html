@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pdf打印界面</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+</head>
+<body ng-app="pdfapp">
+    <div class="container-fluid" ng-controller="pdfcontrol">
+        <div class="row">
+            <div  class="col-lg-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>团检人ID</td>
+                            <td>团检人姓名</td>
+                            <td>团检时间</td>
+                            <td>团检状态</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in allreport">
+                            <td>{{x.reportid}}</td>
+                            <td>{{x.doctorByDoctorid.accountByAccountid.accountname}}</td>
+                            <td>{{x.reportdate}}</td>
+                            <td>{{x.reportstate}}</td>
+                            <td>
+                                <button class="btn btn-primary" ng-click="getreportid(x.reportid)">打印</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pdf"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/assets/scripts/jquery.min.js"></script>
+<script src="/assets/scripts/bootstrap.min.js"></script>
+<script src="/assets/scripts/angular.min.js"></script>
+<script src="/assets/scripts/toastr.min.js"></script>
+<script src="/assets/scripts/md5.min.js"></script>
+<script src="/assets/scripts/base64.min.js"></script>
+<script src="/assets/scripts/juer-script.js"></script>
+<script src="/assets/ckeditor/ckeditor.js"></script>
+<script src="/assets/scripts/pdfobject.js"></script>
+<script src="/assets/scripts/pdfobject.min.js"></script>
+<script>
+    var pdfapp=angular.module("pdfapp",[]);
+    pdfapp.controller("pdfcontrol",['$scope', '$http', function ($scope,$http) {
+        var getreportid=0;
+        $scope.allreport=[];
+        $http.post("/all-report/report-list")
+            .then(
+                function success(response) {
+                    for (let i=0;i<response.data.data.length;i++) {
+                        $scope.allreport.push(response.data.data[i]);
+                    }
+                }
+            )
+        $scope.getreportid=function (reportid) {
+            getreportid=reportid;
+            console.log(getreportid);
+            $http.post("/all-report/report-summary",getreportid).then(function success(response) {
+                console.log(response.data.data)
+                PDFObject.embed(response.data.data, "#pdf");
+            })
+        }
+    }])
+</script>
+</html>

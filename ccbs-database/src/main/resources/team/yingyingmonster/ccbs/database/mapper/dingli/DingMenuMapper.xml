@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.yingyingmonster.ccbs.database.mapper.dingli.DingMenuMapper" >
+  <resultMap id="BaseResultMap" type="team.yingyingmonster.ccbs.database.bean.Menu" >
+    <id column="MENUID" property="menuid" jdbcType="DECIMAL" />
+    <result column="MENUNAME" property="menuname" jdbcType="VARCHAR" />
+    <result column="MENUURL" property="menuurl" jdbcType="VARCHAR" />
+    <result column="MENUSTATE" property="menustate" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    MENUID, MENUNAME, MENUURL, MENUSTATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from MENU_TABLE
+    where MENUID = #{menuid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from MENU_TABLE
+    where MENUID = #{menuid,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="team.yingyingmonster.ccbs.database.bean.Menu" >
+    insert into MENU_TABLE (MENUID, MENUNAME, MENUURL, 
+      MENUSTATE)
+    values (#{menuid,jdbcType=DECIMAL}, #{menuname,jdbcType=VARCHAR}, #{menuurl,jdbcType=VARCHAR}, 
+      #{menustate,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="team.yingyingmonster.ccbs.database.bean.Menu" >
+    insert into MENU_TABLE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuid != null" >
+        MENUID,
+      </if>
+      <if test="menuname != null" >
+        MENUNAME,
+      </if>
+      <if test="menuurl != null" >
+        MENUURL,
+      </if>
+      <if test="menustate != null" >
+        MENUSTATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuid != null" >
+        #{menuid,jdbcType=DECIMAL},
+      </if>
+      <if test="menuname != null" >
+        #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="menuurl != null" >
+        #{menuurl,jdbcType=VARCHAR},
+      </if>
+      <if test="menustate != null" >
+        #{menustate,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="team.yingyingmonster.ccbs.database.bean.Menu" >
+    update MENU_TABLE
+    <set >
+      <if test="menuname != null" >
+        MENUNAME = #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="menuurl != null" >
+        MENUURL = #{menuurl,jdbcType=VARCHAR},
+      </if>
+      <if test="menustate != null" >
+        MENUSTATE = #{menustate,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where MENUID = #{menuid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="team.yingyingmonster.ccbs.database.bean.Menu" >
+    update MENU_TABLE
+    set MENUNAME = #{menuname,jdbcType=VARCHAR},
+      MENUURL = #{menuurl,jdbcType=VARCHAR},
+      MENUSTATE = #{menustate,jdbcType=DECIMAL}
+    where MENUID = #{menuid,jdbcType=DECIMAL}
+  </update>
+</mapper>

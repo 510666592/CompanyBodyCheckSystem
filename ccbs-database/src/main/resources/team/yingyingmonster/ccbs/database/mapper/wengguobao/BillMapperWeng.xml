@@ -55,8 +55,8 @@
 
   <select id="selectByDeptIdAndUserId" parameterType="java.lang.Long" resultMap="BillMap">
     select b.USERCHECKID,b.BILLID,b.BILLSTATE,e.CHECKID,e.CHECKNAME from USER_CHECK_TABLE a,BILL_TABLE b,
-    (select d.CHECKID,d.CHECKNAME from DEPT_TABLE c,CHECK_TABLE d where c.DEPTID=d.DEPTID and c.DEPTID=#{deptId})e
-    where a.USERID=#{userId} and a.USERCHECKID=b.USERCHECKID and b.CHECKID=e.CHECKID and b.BILLSTATE=0
+    (select d.CHECKID,d.CHECKNAME from DEPT_TABLE c,CHECK_TABLE d where c.DEPTID=d.DEPTID and c.DEPTID=#{deptid})e
+    where a.USERID=#{userid} and a.USERCHECKID=b.USERCHECKID and b.CHECKID=e.CHECKID and b.BILLSTATE=0
   </select>
 
   <select id="selectByDeptIdAndUserIdAndUserCheckId" parameterType="java.lang.Long" resultMap="BillMap">
@@ -71,7 +71,7 @@
   <select id="selectAllUserByDeptId" parameterType="java.lang.Long" resultMap="BillMap">
     select distinct c.USERID,c.USERNAME from BILL_TABLE a,USER_CHECK_TABLE b,USER_TABLE c,TEAMFORM_COMBOCHECK_TABLE d,TEAMFORM_TABLE e,CHECK_TABLE f where
   a.USERCHECKID=b.USERCHECKID and b.USERID=c.USERID and b.TEAMFORMCOMBOCHECKID=d.TEAMFORMCOMBOCHECKID and
-    d.TEAMFORMID=e.TEAMFORMID and a.CHECKID=f.CHECKID and e.TEAMFORMSTATE=1 and BILLSTATE=0 and f.DEPTID=#{deptid}
+    d.TEAMFORMID=e.TEAMFORMID and a.CHECKID=f.CHECKID and e.TEAMFORMSTATE=0 and BILLSTATE=0 and f.DEPTID=#{deptid}
   </select>
 
 </mapper>

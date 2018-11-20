@@ -47,21 +47,18 @@
             </form>
             <div class="tools">
     <ul class="toolbar">
-      <li><span><img src="/assets/images/t03.png" /></span>批量删除</li>
-      <li onclick="user_management_add('添加用户','account-management-add.html','600','500')"><span><img src="/assets/images/t01.png" /></span>添加</li>
-      <li><span><img src="/assets/images/t10.png" /></span>导入</li>
-      <li><span><img src="/assets/images/t09.png" /></span>导出</li>
-      <li><span><img src="/assets/images/t07.png" /></span>打印</li>
-      <li><span><img src="/assets/images/t08.png" /></span>审核</li>
+      <!--<li><span><img src="/assets/images/t03.png" /></span>批量删除</li>-->
+      <li onclick="user_management_add('添加用户','account-add','600','500')"><span><img src="/assets/images/t01.png" /></span>添加</li>
+
     </ul>
-    <span class="x-right" style="line-height:25px">共有数据：88 条</span></xblock>
+    <span class="x-right" style="line-height:25px">共有数据： 条</span></xblock>
   </div>
             <table class="tablelist">
                 <thead>
                     <tr>
-                        <th>
+                        <!--<th>
                             <input onclick="selectAll()" type="checkbox"   name="controlAll" style="controlAll" id="controlAll">
-                        </th>
+                        </th>-->
                         <th>
                             ID
                         </th>
@@ -86,9 +83,9 @@
                 </thead>
                 <tbody  ng-controller="accountController">
                     <tr  ng-repeat="account in accountList">
-                        <td>
+                       <!-- <td>
                             <input type="checkbox" value="1" name="selected">
-                        </td>
+                        </td>-->
                         <td>
                             {{account.accountid}}
                         </td>
@@ -96,7 +93,7 @@
                         <td >
                         {{account.accountpassword}}</td>
                         <td >
-                            {{account.accountrole}}</td>
+                            {{account.roleByRoleid.rolename}}</td>
 
                         <td>
                             {{account.registerdate}}
@@ -105,10 +102,10 @@
                             <button class="sp">已启用</button>
                         </td>
                         <td class="td-manage">
-                            <a style="text-decoration:none" onclick="member_stop(this,'10001')" href="javascript:;" title="停用">
+                            <a style="text-decoration:none"  onclick="member_stop(this,'10001')" href="javascript:;" title="停用">
                                 <i class="layui-icon">&#xe601;</i>
                             </a>
-                            <a title="编辑" href="javascript:;" onclick="user_management_edit('编辑','user-management-edit.html','4','','510')"
+                            <a title="编辑" href="javascript:;" onclick="user_management_edit('修改账户信息','account-edit','4','','510')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
@@ -116,7 +113,7 @@
                             href="javascript:;" title="修改密码">
                                 <i class="layui-icon">&#xe631;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="member_del(this,'1')" 
+                            <a title="删除" ng-click="deleteAccount(account.accountid)" href="javascript:;"
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -125,7 +122,7 @@
                 </tbody>
             </table>
 <div class="page"  v-show="show">
-  <div class="pagelist"> <span class="jump">上一页</span> <span class="jump">下一页</span>  </div>
+  <div class="pagelist"> <span class="jump">首页</span><span class="jump">上一页</span> <span class="jump">下一页</span> <span class="jump">尾页</span> </div>
 </div>
 </div>
 <br />
@@ -156,12 +153,24 @@
                             } else {
                                 //console.error(response);
                                 console.log(resultMessage);
-                                toastr.error("Get menu info unsuccessful!");
+                                toastr.error("获取人员信息失败，可能是网络原因!");
                             }
                         }, function error(response) {
                             console.error(response);
-                            toastr.error("获取菜单信息失败,可能是网络原因!");
+                            toastr.error("获取人员信息失败,可能是网络原因!");
                         });
+                //删除账户
+                $scope.deleteAccount = function (accountid) {
+                    if (confirm("确定删除？")) {
+                        console.log(accountid);
+                        $http.post("/accountList/account-delete",accountid
+                        ).then(
+                            function success(response) {
+                                window.alert(response.data.message);
+                            }
+                        )
+                    }
+                }
             });
             //创建模糊查询控制器
             /*ngApp.controller("selectAccountController",function ($scopr,$http) {

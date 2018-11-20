@@ -25,4 +25,5 @@ public interface MenuService {
      * @return 菜单列表
      */
     List<Menu> selectAccountMenuByRoleId(Long roleId);
+    boolean updateMenu(Menu menu);//修改菜单
 }

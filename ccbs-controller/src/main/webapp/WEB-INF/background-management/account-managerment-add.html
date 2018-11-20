@@ -13,17 +13,17 @@
     <link rel="stylesheet" href="/assets/css/x-admin.css" media="all">
 </head>
 
-<body ng-app="ngApp">
+<body ng-app="addAccountApp">
 <div class="x-body">
-    <form ng-submit="submitForm()" ng-controller="accountController"
-          method="post" onsubmit="return checkForm()">
+    <form ng-submit="submitForm()" ng-controller="addAccountController"
+          method="post">
         <input type="hidden" value="addManager" name="method">
         <div class="layui-form-item">
-            <label for="L_email" class="layui-form-label"> <span
+            <label for="L_name" class="layui-form-label"> <span
                     class="x-red">*</span>设置账户名
             </label>
             <div class="layui-input-inline">
-                <input type="text"  ng-model="account.accountName" name="accountName" id="accountName" onblur="check1()"
+                <input type="text"  ng-model="account.accountname" name="accountname" id="accountname"
                        class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">
@@ -36,7 +36,7 @@
             <label class="layui-form-label"> <span class="x-red">*</span>密码
             </label>
             <div class="layui-input-inline">
-                <input type="password" ng-model="account.accountPassword" id="L_pass" name="ADMINPSW"
+                <input type="password" ng-model="account.accountpassword" id="L_pass" name="accountpassword"
                        onblur="check2()" class="layui-input">
             </div>
             <div class="layui-form-mid layui-word-aux">6到16个字符</div>
@@ -46,29 +46,28 @@
                     class="x-red">*</span>确认密码
             </label>
             <div class="layui-input-inline">
-                <input type="password" ng-model="account.accountPassword" id="L_repass" name="REPWD" onblur="check3()"
+                <input type="password" ng-model="account.accountpassword" id="L_repass" name="accountpassword" onblur="check3()"
                        class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label for="L_username" class="layui-form-label"> <span
+            <label for="L_role" class="layui-form-label"> <span
                     class="x-red">*</span>角色
             </label>
-            <select name="ACCOUNTROLE" ng-model="account.roleId">
+            <select name="roleid" ng-model="account.roleid">
                 <option value="1">团检单位</option>
                 <option value="2">医生</option>
                 <option value="3">总检医生</option>
                 <option value="4">前台服务</option>
                 <option value="5">管理员</option>
                 <option value="6">超级管理员</option>
-
             </select>
         </div>
 
         <div class="layui-form-item">
             <label for="L_repass" class="layui-form-label"> </label>
-            <button class="layui-btn">
+            <button type="submit" class="layui-btn">
                 <font color="yellow">增加</font>
             </button>
             <button class="layui-btn" type="reset">重置</button>
@@ -83,29 +82,35 @@
 </script>
 <script src="/assets/scripts/angular.min.js"></script>
 <script>
-    var app = angular.module("ngApp",[]);
-    app.controller('accountController',function ($scope,$http) {
-        $scope.submitForm = function () {
-            console.log('enter submitForm');
-            $http({
-                method:'post',
-                url:'/addAccount',
-                data:$.param($scope.account),
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+    var app = angular.module('addAccountApp', []);
+    app.controller('addAccountController', function($scope, $http) {
+        $scope.submitForm=function () {
+            var data = {
+                "accountname":$scope.accountname,
+                "accountpassword":$scope.accountpassword,
+                "roleid":$scope.roleid
+            };
+            //console.log("accountname"+$scope.accountname);
+            $http.post("/accountList/account-management-add", data
+            ).then(
+                function success (msg) {
+                    console.log(msg);
+                    var msg = msg.data;
+                    if (msg.state==200){
+                        window.alert(msg.message);
+                        window.location.href="/accountList/index";
+                    }
+                }, function error (msg) {
+                    if (msg.state==400){
+                        window.alert(msg.message);
+                    }
                 }
-            }).then(function(resp){
-                console.log('post success');
-                console.log(resp);
-            },function(resp){
-                console.log('post error');
-                console.log(resp);
-            });
+            )
         }
     });
-</script>
+    </script>
 <script type="text/javascript">
-    $(document)
+   /* $(document)
         .ready(
             function() {
                 $("REALNAME")
@@ -124,8 +129,8 @@
                                     }
                                 });
                         });
-            });
-    function checkName() {
+            });*/
+    /*function checkName() {
         var realName = document.getElementById("REALNAME").value;
         var req = getXMLHttpRequest();
         req.open("get",
@@ -141,14 +146,14 @@
                 }
             }
         }
-    }
-    function check1() {
+    }*/
+    /*function check1() {
         var Username = document.getElementById("accountName").value;
 
         if (Username == "")
 
             alert("请设置账户名！");
-    }
+    }*/
     function check2() {
         var pwd = document.getElementById("L_pass").value;
         if (pwd == "")

@@ -8,6 +8,10 @@
     <result column="ACCOUNTPASSWORD" property="accountpassword" jdbcType="VARCHAR" />
     <result column="ACCOUNTSTATE" property="accountstate" jdbcType="DECIMAL" />
     <result column="REGISTERDATE" property="registerdate" jdbcType="TIMESTAMP" />
+    <association property="roleByRoleid" resultMap="RoleIdResultMap"/>
+  </resultMap>
+  <resultMap id="RoleIdResultMap" type="team.yingyingmonster.ccbs.database.bean.Role">
+    <result column="ROLENAME" property="rolename" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     ACCOUNTID, ROLEID, ACCOUNTNAME, ACCOUNTPASSWORD, ACCOUNTSTATE, REGISTERDATE
@@ -15,16 +19,24 @@
   <select id="selectAllAccount" resultMap="BaseResultMap">
         SELECT*FROM(SELECT a.*,b.ROLENAME FROM ACCOUNT_TABLE a,ROLE_TABLE b WHERE a.ROLEID=b.ROLEID)
     </select>
+  <insert id="addAccount" useGeneratedKeys="true" parameterType="team.yingyingmonster.ccbs.database.bean.Account">
+    <selectKey keyProperty="accountid" order="BEFORE" resultType="java.lang.Long">
+      select ACCOUNT_SEQUENCE.nextval from dual
+    </selectKey>
+    insert into ACCOUNT_TABLE (ACCOUNTID, ROLEID, ACCOUNTNAME,
+    ACCOUNTPASSWORD, ACCOUNTSTATE, REGISTERDATE)
+    values (#{accountid,jdbcType=DECIMAL}, 1, #{accountname,jdbcType=VARCHAR},
+    #{accountpassword,jdbcType=VARCHAR}, 0, sysdate)
+  </insert>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from ACCOUNT_TABLE
     where ACCOUNTID = #{accountid,jdbcType=DECIMAL}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from ACCOUNT_TABLE
-    where ACCOUNTID = #{accountid,jdbcType=DECIMAL}
-  </delete>
+  <update id="deleteByPrimaryKey" parameterType="team.yingyingmonster.ccbs.database.bean.Account" >
+    update ACCOUNT_TABLE set ACCOUNTSTATE = 2 where ACCOUNTID = #{accountid,jdbcType=DECIMAL}
+  </update>
   <insert id="insert" parameterType="team.yingyingmonster.ccbs.database.bean.Account" >
     insert into ACCOUNT_TABLE (ACCOUNTID, ROLEID, ACCOUNTNAME, 
       ACCOUNTPASSWORD, ACCOUNTSTATE, REGISTERDATE

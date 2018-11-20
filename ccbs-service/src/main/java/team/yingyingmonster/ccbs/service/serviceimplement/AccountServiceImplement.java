@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import team.yingyingmonster.ccbs.database.bean.Account;
 import team.yingyingmonster.ccbs.database.bean.Company;
 import team.yingyingmonster.ccbs.database.bean.User;
+import team.yingyingmonster.ccbs.database.mapper.dingli.AccountListMapper;
 import team.yingyingmonster.ccbs.database.mapper.juergenie.JuerCompanyMapper;
 import team.yingyingmonster.ccbs.database.mapper.zhw.ZhaoAccountMapper;
 import team.yingyingmonster.ccbs.database.mapper.zhw.ZhaoCompanyMapper;
@@ -30,6 +31,8 @@ public class AccountServiceImplement implements AccountService {
     @Autowired
     private ZhaoCompanyMapper zhaoCompanyMapper;
 
+    @Autowired
+    private AccountListMapper accountListMapper;
 
     @Override
     public Account login(Long accountId, String accountPassword) {
@@ -76,5 +79,30 @@ public class AccountServiceImplement implements AccountService {
     public Long findCompanyId(Long accountId) {
         Long companyId = juerCompanyMapper.selectCompanyByAccountId(accountId).getCompanyid();
         return companyId;
+    }
+    /**
+     * 后台管理员添加用户
+     */
+    @Override
+    public Long addAccountInTheBackground(String accountName, String accountPassword, Long roleId) {
+        Account account = new Account();
+        account.setAccountname(accountName);
+        account.setAccountpassword(accountPassword);
+        account.setRoleid(roleId);
+        Long insert = accountListMapper.addAccount(account);
+        if(insert!=null){
+            return account.getAccountid();
+        }else {
+            return null;
+        }
+    }
+    /**
+     * 后台删除用户
+     */
+    @Override
+    public boolean deleteAccount(Long accountId) {
+        Integer result=0;
+        result = accountListMapper.deleteByPrimaryKey(accountId);
+        return result>0;
     }
 }

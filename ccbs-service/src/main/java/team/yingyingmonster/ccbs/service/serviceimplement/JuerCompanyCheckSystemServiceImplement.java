@@ -19,6 +19,7 @@ import team.yingyingmonster.ccbs.service.serviceinterface.JuerCompanyCheckSystem
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +31,8 @@ import java.util.List;
  **/
 @Service
 public class JuerCompanyCheckSystemServiceImplement implements JuerCompanyCheckSystemService {
+    @Autowired
+    private CompanyMapper companyMapper;
     @Autowired
     private JuerCompanyMapper juerCompanyMapper;
     @Autowired
@@ -129,7 +132,8 @@ public class JuerCompanyCheckSystemServiceImplement implements JuerCompanyCheckS
         }
 
         Company company = juerCompanyMapper.selectCompanyByAccountId(account.getAccountid());
-        if (getCompanyCheckPrice(juerCompanyCheckEntity.getSelectCombo()) > company.getCompanyprice().doubleValue())
+        Double price = getCompanyCheckPrice(juerCompanyCheckEntity.getSelectCombo());
+        if (price > company.getCompanyprice().doubleValue())
             return false;
 
         if (juerTeamformMapper.insert(teamform)<1)
@@ -142,6 +146,8 @@ public class JuerCompanyCheckSystemServiceImplement implements JuerCompanyCheckS
         if (juerBillMapper.insertBatch(billList)<1)
             throw new Exception("插入团检数据失败 - juerBillMapper.insertBatch");
 
+        company.setCompanyprice(company.getCompanyprice().subtract(new BigDecimal(price)));
+        companyMapper.updateByPrimaryKey(company);
         return true;
     }
 

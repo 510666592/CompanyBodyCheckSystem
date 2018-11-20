@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登入界面</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/assets/css/toastr.min.css" rel="stylesheet"/>
+    <link href="/assets/css/open-iconic-bootstrap.min.css" rel="stylesheet"/>
+    <link href="/assets/css/juer-style.css" rel="stylesheet"/>
+    <style>
+        /*web background*/
+        .container{
+            display:table;
+            height:100%;
+            weight:100%
+        }
+        .row{
+            display: table-cell;
+            vertical-align: middle;
+        }
+        /* centered columns styles */
+        .row-centered {
+            text-align:center;
+        }
+        .col-centered {
+            display:inline-block;
+            float:none;
+            text-align:center;
+            margin-right:-4px;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+    function adminlogin(){
+        var accountId=$("#accountId").val();
+        var accountPassword=$("#accountPassword").val();
+        console.log(accountId,accountPassword);
+        $.ajax({
+            url:"/login/loginAction",
+            data:{
+                "accountId":accountId,
+                "accountPassword":accountPassword
+            },
+            type:"post",
+            success:function(msg){
+                if (msg=="true") {
+                    alert("登入成功！");
+                    window.location.href="/index";
+                }else if (msg=="null") {
+                    alert("账号或者密码错误！");
+                    loadimage();
+                }else{
+                    alert("验证码错误！");
+                    loadimage();
+                }
+            }
+        });
+    }
+    function check() {
+        if (document.form.accountId.value == ""
+            || document.form.accountPassword.value == ""
+            || document.form.rand.value == "") {
+            alert('请输入完整');
+            return false;
+        }
+    }
+    function loadimage() {
+        document.getElementById("loadimage").src = "/Image/createImg" + Math.random();
+    }
+</script>
+<body>
+<div class="card img-fluid" style="width:100%">
+    <img class="card-img-top" src="../assets/images/background.png" alt="Card image" style="width:100%;height: 640px;">
+    <div class="card-img-overlay">
+        <div class="container">
+            <div class="row row-centered">
+                <div class="well col-lg-4 col-centered">
+                    <h2 calss="card-title">登入界面</h2>
+                    <form:form action="/login/loginAction" method="post" role="form">
+                        <div class="input-group input-group-lg">
+                            <input type="text" class="form-control" id="accountId" name="accountId" placeholder="请输入用户ID" />
+                        </div>
+                        <div class="input-group input-group-lg">
+                            <input type="password" class="form-control" id="accountPassword" name="accountPassword" placeholder="请输入密码"/>
+                        </div>
+                        <div>
+                            <a href="#" onclick="loadimage()"><img alt="看不清请点我！" id="rand" name="rand" height="60" border="1" align="absmiddle" style="padding-top: 15px;"
+                                             src="/Image/createImg" onclick="loadimage()"></a>
+                            <input type="text" class="form-control" id="CodeImage" name="CodeImage" placeholder="请输入验证码"/>
+                            </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal" >登录
+                        </button>
+                        <div class="modal fade" id="myModal" style="margin-top: 200px">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <!-- 模态框头部 -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">恭喜</h4>
+                                        <button type="submit" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <!-- 模态框主体 -->
+                                    <div class="modal-body">
+                                        登入成功！
+                                    </div>
+                                    <!-- 模态框底部 -->
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-secondary" data-dismiss="modal" onclick="adminlogin()">关闭</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary btn-block">注册</button>
+                    </form:form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/assets/scripts/angular.min.js"></script>
+<script src="/assets/scripts/jquery.min.js"></script>
+<script src="/assets/scripts/bootstrap.min.js"></script>
+<script src="/assets/scripts/bootstrap.bundle.min.js"></script>
+<script src="/assets/scripts/toastr.min.js"></script>
+<script src="/assets/scripts/md5.min.js"></script>
+<script src="/assets/scripts/base64.min.js"></script>
+<script src="/assets/scripts/juer-script.js"></script>
+<script src="/assets/scripts/popper.min.js"></script>
+</html>

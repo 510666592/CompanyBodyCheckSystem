@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.yingyingmonster.ccbs.database.mapper.dingli.DingComboMapper" >
+  <resultMap id="BaseResultMap" type="team.yingyingmonster.ccbs.database.bean.Combo" >
+    <id column="COMBOID" property="comboid" jdbcType="DECIMAL" />
+    <result column="COMBONAME" property="comboname" jdbcType="VARCHAR" />
+    <result column="COMBOSUMMARY" property="combosummary" jdbcType="VARCHAR" />
+    <result column="COMBORATIO" property="comboratio" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    COMBOID, COMBONAME, COMBOSUMMARY, COMBORATIO
+  </sql>
+  <select id="selectAllCombo" resultMap="BaseResultMap">
+        select * from COMBO_TABLE
+    </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from COMBO_TABLE
+    where COMBOID = #{comboid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from COMBO_TABLE
+    where COMBOID = #{comboid,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="team.yingyingmonster.ccbs.database.bean.Combo" >
+    insert into COMBO_TABLE (COMBOID, COMBONAME, COMBOSUMMARY, 
+      COMBORATIO)
+    values (#{comboid,jdbcType=DECIMAL}, #{comboname,jdbcType=VARCHAR}, #{combosummary,jdbcType=VARCHAR}, 
+      #{comboratio,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="team.yingyingmonster.ccbs.database.bean.Combo" >
+    insert into COMBO_TABLE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="comboid != null" >
+        COMBOID,
+      </if>
+      <if test="comboname != null" >
+        COMBONAME,
+      </if>
+      <if test="combosummary != null" >
+        COMBOSUMMARY,
+      </if>
+      <if test="comboratio != null" >
+        COMBORATIO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="comboid != null" >
+        #{comboid,jdbcType=DECIMAL},
+      </if>
+      <if test="comboname != null" >
+        #{comboname,jdbcType=VARCHAR},
+      </if>
+      <if test="combosummary != null" >
+        #{combosummary,jdbcType=VARCHAR},
+      </if>
+      <if test="comboratio != null" >
+        #{comboratio,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="team.yingyingmonster.ccbs.database.bean.Combo" >
+    update COMBO_TABLE
+    <set >
+      <if test="comboname != null" >
+        COMBONAME = #{comboname,jdbcType=VARCHAR},
+      </if>
+      <if test="combosummary != null" >
+        COMBOSUMMARY = #{combosummary,jdbcType=VARCHAR},
+      </if>
+      <if test="comboratio != null" >
+        COMBORATIO = #{comboratio,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where COMBOID = #{comboid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="team.yingyingmonster.ccbs.database.bean.Combo" >
+    update COMBO_TABLE
+    set COMBONAME = #{comboname,jdbcType=VARCHAR},
+      COMBOSUMMARY = #{combosummary,jdbcType=VARCHAR},
+      COMBORATIO = #{comboratio,jdbcType=DECIMAL}
+    where COMBOID = #{comboid,jdbcType=DECIMAL}
+  </update>
+</mapper>

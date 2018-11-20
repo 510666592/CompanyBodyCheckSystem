@@ -15,16 +15,16 @@
         <link rel="stylesheet" href="/assets/css/x-admin.css" media="all">
     </head>
     
-    <body>
-        <div class="x-body">
-            <form class="layui-form">
+    <body ng-app="menuApp">
+        <div class="x-body" ng-controller="updateMenuController">
+            <form class="layui-form" ng-submit="updateForm()" name="updateMenuForm">
                 <div class="layui-form-item">
                     <label for="name" class="layui-form-label">
                         <span class="x-red">*</span>菜单名
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="name" name="name" required lay-verify="required"
-                        autocomplete="off"  value="链接名" class="layui-input">
+                        <input type="text" id="name" name="menuName" ng-model="menu.menuname" required lay-verify="required"
+                        autocomplete="off"  placeholder="请输入菜单名" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -32,24 +32,41 @@
                         <span class="x-red">*</span>URL
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="link" name="link" required lay-verify="required"
-                        autocomplete="off" value="http://www.baidu.com" class="layui-input">
+                        <input type="text" id="link" name="menulink" ng-model="menu.menuurl" required lay-verify="required"
+                        autocomplete="off" placeholder="请输入链接" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label for="L_repass" class="layui-form-label">
                     </label>
-                    <button  class="layui-btn">
+                    <button  class="layui-btn" type="submit">
                         保存
                     </button>
                 </div>
             </form>
         </div>
+        <script src="/assets/scripts/angular.min.js"></script>
         <script src="/assets/lib/layui/layui.js" charset="utf-8">
         </script>
         <script src="/assets/js/x-layui.js" charset="utf-8">
         </script>
+    <script>
+        var app = angular.module('menuApp', []);
+        app.controller('updateMenuController', function ($scope, $http) {
+
+            //修改菜单信息
+            $scope.updateForm = function () {
+                console.log("修改：",$scope.menu);
+                $http.post("/menuList/update-menu", $scope.menu
+                ).then(
+                    function success(response) {
+                        window.alert(response.data.message);
+                    }
+                )
+            }
+        });
+    </script>
     </body>
 
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="h-100">
 <head>
     <meta charset="UTF-8">
     <title>中央框架</title>
@@ -8,7 +8,7 @@
     <link href="/assets/css/open-iconic-bootstrap.min.css" rel="stylesheet"/>
     <link href="/assets/css/juer-style.css" rel="stylesheet"/>
 </head>
-<body ng-app="leftFrameApp">
+<body ng-app="leftFrameApp" class="h-100">
 <div class="container-fluid h-100">
     <!--创建一个行-->
     <div class="row h-100">
@@ -78,5 +78,9 @@
             window.frames["mainPageFrame"].location.href = button.menuurl + "/index";
         };
     });
+
+    $(function () {
+        $("#mainPageFrame").height(window.innerHeight - 7);
+    })
 </script>
 </html>

@@ -7,4 +7,5 @@ import java.util.List;
 public interface JuerMenuMapper {
     List<Menu> selectAllMenu();
     List<Menu> selectMenusByCondition(Menu condition);
+    List<Menu> selectMenusByRoleid(Long roleid);
 }

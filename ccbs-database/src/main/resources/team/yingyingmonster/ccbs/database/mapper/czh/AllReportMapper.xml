@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.yingyingmonster.ccbs.database.mapper.czh.AllReportMapper" >
+      <resultMap id="AllReportResultMap" type="team.yingyingmonster.ccbs.database.bean.Report">
+          <id column="REPORTID" property="reportid" jdbcType="DECIMAL"/>
+          <result column="BILLID" property="billid" jdbcType="DECIMAL"/>
+          <result column="REPORTDATE" property="reportdate" />
+          <result column="REPORTSUMMARY" property="reportsummary" jdbcType="CLOB"/>
+          <result column="REPORTSTATE" property="reportstate" jdbcType="DECIMAL"/>
+          <result column="DOCTORID" property="doctorid" jdbcType="DECIMAL"/>
+          <association property="doctorByDoctorid" resultMap="DoctorIdResultMap"/>
+      </resultMap>
+      <resultMap id="DoctorIdResultMap"  type="team.yingyingmonster.ccbs.database.bean.Doctor">
+          <id column="DOCTORID" property="doctorid" jdbcType="DECIMAL"/>
+          <result column="ACCOUNTID" property="accountid" jdbcType="DECIMAL"/>
+          <association property="accountByAccountid" resultMap="AccountIdResultMap"/>
+      </resultMap>
+      <resultMap id="AccountIdResultMap" type="team.yingyingmonster.ccbs.database.bean.Account">
+          <result column="ACCOUNTNAME" property="accountname" jdbcType="VARCHAR"/>
+      </resultMap>
+
+      <select id="selectAllReport" resultMap="AllReportResultMap">
+          select a.REPORTID,c.ACCOUNTNAME,a.REPORTDATE,a.REPORTSTATE from REPORT_TABLE a,DOCTOR_TABLE b,ACCOUNT_TABLE c
+           where a.DOCTORID=b.DOCTORID and b.ACCOUNTID=c.ACCOUNTID
+      </select>
+      <select id="selectReportSummary" resultMap="AllReportResultMap">
+          select REPORTSUMMARY from REPORT_TABLE where REPORTID= #{reportid}
+      </select>
+</mapper>

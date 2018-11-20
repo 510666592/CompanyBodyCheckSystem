@@ -41,9 +41,8 @@
   <div class="tools">
     <ul class="toolbar">
       <li><span><img src="/assets/images/t03.png" /></span>批量删除</li>
-      <li onclick="user_management_add('添加用户','Dangan-add.html','1000','600')"><span><img src="/assets/images/t01.png" /></span>添加</li>
+      <li onclick="user_management_add('添加用户','add-company','1000','600')"><span><img src="/assets/images/t01.png" /></span>添加</li>
       <li onclick="user_management_edit('用户编辑','Dangan-edit.html','600','500')"><span><img src="/assets/images/t02.png" /></span>编辑</li>
-      <li onclick="user_management_show('用户查看','Dangan-look.html','600','500')"><span><img src="/assets/images/t06.png" /></span>查看</li>
     </ul>
     <span class="x-right" style="line-height:25px">共有数据： 条</span></xblock>
   </div>
@@ -52,6 +51,7 @@
       <tr>
         <th> <input onclick="selectAll()" type="checkbox"   name="controlAll" style="controlAll" id="controlAll">
         </th>
+        <th>单位编号</th>
         <th>单位名称</th>
         <th> 单位余额 </th>
         <th> 单位邮箱</th>
@@ -59,13 +59,14 @@
         <th> 操作 </th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
+    <tbody ng-app="companyApp"  ng-controller="companyListController">
+      <tr ng-repeat="company in companyList">
         <td><input type="checkbox" value="1" name="selected"></td>
-        <td>张三</td>
-        <td>10000</td>
-        <td > defe@qq.co,</td>
-        <td > 1234235456</td>
+        <td>{{company.companyid}}</td>
+        <td>{{company.account.accountname}}</td>
+        <td>{{company.companyprice}}</td>
+        <td >{{company.companyemail}}</td>
+        <td >{{company.companyphone}}</td>
         <td class="td-manage">
           <a title="编辑" href="javascript:;" onclick="link_edit('编辑','link-edit.html','4','','510')"
              class="ml-5" style="text-decoration:none">
@@ -80,20 +81,70 @@
     </tbody>
   </table>
      <div class="page"  v-show="show">
-  <div class="pagelist"> <span class="jump">上一页</span><span class="jump">下一页</span><span class="jumpinp">
-    <input type="text">
-    </span>
+       <div class="pagelist">
+        <a href="#" ng-click="selectCompany(1)">
+         <span class="jump">首页</span>
+        </a>
+           <a href="#" ng-click="selectCompany(pageInfo.prePage)" ng-disabled="pageInfo.hasPreviousPage==false||pageInfo.hasPreviousPage==null">
+         <span class="jump">上一页</span>
+           </a>
+           <a href="#" ng-click="selectCompany(pageInfo.nextPage)" ng-disabled="pageInfo.hasNextPage==false||pageInfo.hasNextPage==null">
+         <span class="jump">下一页</span>
+           </a>
+           <a href="#" ng-click="selectCompany(pageInfo.pages)" ng-disabled="pageInfo.pages==null">
+         <span class="jump">尾页</span>
+           </a>
   </div>
 </div>
 </div>
 <br />
 <br />
 <br />
+<script src="/assets/scripts/angular.min.js"></script>
 <script src="/assets/lib/layui/layui.js" charset="utf-8"></script>
 <script src="/assets/js/x-layui.js" charset="utf-8"></script>
 <script src="/assets/js/jquery2.js" charset="utf-8"></script>
 <script src="/assets/js/js.js" charset="utf-8"></script>
 <script>
+    // 创建angularjs模块
+    let ngApp = angular.module('companyApp', []);
+
+    // 创建菜单列表控制器
+    ngApp.controller('companyListController', function ($scope, $http) {
+        $scope.companyList = [];
+        $http.post("/company-list/get-companyList")
+            .then(
+                function success(response) {
+                    resultMessage = response.data;
+                    console.log(response);
+                    if (resultMessage.state == 200) {
+                        $(resultMessage.data).each(function (i, v) {
+                            $scope.companyList.push(v);
+                        });
+                    } else {
+                        //console.error(response);
+                        console.log(resultMessage);
+                       // toastr.error("获取单位信息失败,可能是网络原因!");
+                    }
+                }, function error(response) {
+                    console.error(response);
+                    //toastr.error("获取单位信息失败,可能是网络原因!");
+                });
+        //分页查看公司信息
+       /* $scope.selectCompany = function (pageNum) {
+            if(pageNum==null){
+                pageNum =1;
+            }
+            $http.post("/company-list/get-companyList",pageNum).then(
+                function success(response) {
+                    $scope.pageInfo=response.data.data;
+                    if($scope.pageInfo.list.length==0 && $scope.pageInfo.pageNum==1){
+                        window.alert("暂无信息");
+                    }
+                }
+            )
+        }*/
+    });
             layui.use(['laydate','element','laypage','layer'], function(){
                 $ = layui.jquery;
               lement = layui.element();//面包导航

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            套餐管理
+        </title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <link rel="stylesheet" href="/assets/css/x-admin.css" media="all">
+        <link rel="stylesheet" href="/assets/css/pag.css" media="all">
+    </head>
+    <body ng-app="comboListApp">
+        <div class="x-nav">
+            <span class="layui-breadcrumb">
+              <a><cite>首页</cite></a>
+              <a><cite>套餐管理</cite></a>
+            </span>
+            <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
+        </div>
+        <ul class="toolbar">
+            <!--<li><span><img src="/assets/images/t03.png" /></span>批量删除</li>-->
+            <li onclick="user_management_add('添加用户','account-add','600','500')"><span><img src="/assets/images/t01.png" /></span>添加</li>
+
+        </ul>
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            套餐名
+                        </th>
+                        <th>
+                            套餐总览
+                        </th>
+                        <th>
+                            套餐折扣
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody  ng-controller="comboController">
+                    <tr  ng-repeat="combo in comboList">
+
+                        <td>
+                            {{combo.comboid}}
+                        </td>
+
+                        <td >
+                        {{combo.comboname}}
+                        </td>
+                        <td >
+                            {{combo.combosummary}}</td>
+
+                        <td>
+                            {{combo.comboratio}}
+                        </td>
+
+                        <td class="td-manage">
+
+                            <a title="编辑" href="javascript:;" onclick="user_management_edit('修改账户信息','account-edit','4','','510')"
+                            class="ml-5" style="text-decoration:none">
+                                <i class="layui-icon">&#xe642;</i>
+                            </a>
+
+                            <a title="删除" ng-click="deleteAccount(account.accountid)" href="javascript:;"
+                            style="text-decoration:none">
+                                <i class="layui-icon">&#xe640;</i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+</div>
+<br />
+<br />
+<br />
+        <script src="/assets/scripts/angular.min.js"></script>
+        <script src="/assets/lib/layui/layui.js" charset="utf-8"></script>
+        <script src="/assets/js/x-layui.js" charset="utf-8"></script>
+        <script src="/assets/js/jquery2.js" charset="utf-8"></script>
+        <script src="/assets/js/js.js" charset="utf-8"></script>
+        <script>
+            // 创建angularjs模块
+            let ngApp = angular.module('comboListApp', []);
+
+            // 创建人员列表控制器
+            ngApp.controller('comboController', function ($scope, $http) {
+                $scope.comboList = [];
+                $http.post("/combo-list/get-comboList")
+                    .then(
+                        function success(response) {
+                            resultMessage = response.data;
+                            console.log(response);
+                            if (resultMessage.state == 200) {
+                                $(resultMessage.data).each(function (i, v) {
+                                    $scope.comboList.push(v);
+                                });
+
+                            } else {
+                                //console.error(response);
+                                console.log(resultMessage);
+                                toastr.error("!");
+                            }
+                        }, function error(response) {
+                            console.error(response);
+                            toastr.error("!");
+                        });
+                //删除账户
+                $scope.deleteAccount = function (accountid) {
+                    if (confirm("确定删除？")) {
+                        console.log(accountid);
+                        $http.post("/accountList/account-delete",accountid
+                        ).then(
+                            function success(response) {
+                                window.alert(response.data.message);
+                            }
+                        )
+                    }
+                }
+            });
+            //创建模糊查询控制器
+            /*ngApp.controller("selectAccountController",function ($scopr,$http) {
+                $scope.submitForm=function (){
+                    let accountid=$("#accountid").val();
+
+                }
+            })*/
+
+
+        </script>
+        <script>
+            layui.use(['laydate','element','laypage','layer'], function(){
+                $ = layui.jquery;//jquery
+              lement = layui.element();//面包导航
+              laypage = layui.laypage;//分页
+              layer = layui.layer;//弹出层
+
+            });
+
+             /*用户-添加*/
+            function user_management_add(title,url,w,h){
+                x_admin_show(title,url,w,h);
+            }
+            /*用户-查看*/
+            function user_management_show(title,url,id,w,h){
+                x_admin_show(title,url,w,h);
+            }
+
+             /*用户-停用*/
+            function member_stop(obj,id){
+                layer.confirm('确认要停用吗？',function(index){
+                    //发异步把用户状态进行更改
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_start(this,id)" href="javascript:;" title="启用"><i class="layui-icon">&#xe62f;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<button class="sp3">已停用</button>');
+                    $(obj).remove();
+                    layer.msg('已停用!',{icon: 5,time:1000});
+                });
+            }
+
+            /*用户-启用*/
+            function member_start(obj,id){
+                layer.confirm('确认要启用吗？',function(index){
+                    //发异步把用户状态进行更改
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_stop(this,id)" href="javascript:;" title="停用"><i class="layui-icon">&#xe601;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<button class="sp">已启用</button>');
+                    $(obj).remove();
+                    layer.msg('已启用!',{icon: 6,time:1000});
+                });
+            }
+            // 用户-编辑
+            function user_management_edit (title,url,id,w,h) {
+                x_admin_show(title,url,w,h); 
+            }
+            /*密码-修改*/
+            function user_management_password(title,url,id,w,h){
+                x_admin_show(title,url,w,h);  
+            }
+           
+	$('.tablelist tbody tr:odd').addClass('odd');
+            </script>
+    </body>
+</html>

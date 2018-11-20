@@ -23,6 +23,7 @@
         </div>
     </div>
     <hr/>
+    <!--startprint-->
     <div class="row justify-content-center align-items-start">
         <div class="col-10 text-center">
             <h4>体检人员：</h4>
@@ -82,6 +83,7 @@
             </table>
         </div>
     </div>
+    <!--endprint-->
 </div>
 </body>
 <script src="/assets/scripts/angular.min.js"></script>
@@ -130,7 +132,8 @@
             if (!$scope.selectedUser.usercheckid)
                 toastr.error("请选择一个用户。");
             else
-                $scope.download("/guide-show/download-pdf", `${window.location.host}/guide-show/render?usercheckid=${$scope.selectedUser.usercheckid}`, "application/pdf");
+                window.print();
+                // $scope.download("/guide-show/download-pdf", `${window.location.host}/guide-show/render?usercheckid=${$scope.selectedUser.usercheckid}`, "application/pdf");
         };
 
         $scope.getUserQrCode = function () {

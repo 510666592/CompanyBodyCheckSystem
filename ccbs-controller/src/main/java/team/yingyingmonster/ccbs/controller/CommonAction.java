@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team.yingyingmonster.ccbs.bean.ResultMessage;
+import team.yingyingmonster.ccbs.database.bean.Account;
 import team.yingyingmonster.ccbs.database.bean.Menu;
 import team.yingyingmonster.ccbs.database.mapper.MenuMapper;
 import team.yingyingmonster.ccbs.database.mapper.juergenie.JuerMenuMapper;
@@ -31,10 +32,9 @@ public class CommonAction {
 
     @RequestMapping("/get-menu")
     @ResponseBody
-    public ResultMessage getMenu() {
-        Menu menu = new Menu();
-        menu.setMenustate(Constant.MENU_STATE_DISABLE);
-        return ResultMessage.createSuccessMessage("success!", juerMenuMapper.selectAllMenu());
+    public ResultMessage getMenu(HttpSession session) {
+        Account account = (Account) session.getAttribute(Constant.SESSION_LOGIN_ACCOUNT);
+        return ResultMessage.createSuccessMessage("success!", juerMenuMapper.selectMenusByRoleid(account.getRoleid()));
     }
 
     @RequestMapping("/user-info")

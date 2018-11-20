@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <div ng-repeat="x in reports">
                                 <a class="collapsed card-link list-group-item list-group-item-action" data-toggle="collapse" href="#card{{x.billByBillid.userCheckByUsercheckid.usercheckid}}" ng-click="getsummarys(x.billByBillid.userCheckByUsercheckid.usercheckid)">
-                                    {{x.billByBillid.userCheckByUsercheckid.userByUserid.username}}
+                                    {{x.billByBillid.userCheckByUsercheckid.user.username}}
                                 </a>
 
                                 <div id="card{{x.billByBillid.userCheckByUsercheckid.usercheckid}}" class="collapse" data-parent="#cardparent">
